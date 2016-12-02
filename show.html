@@ -1,0 +1,116 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>无标题文档</title>
+</head>
+<style>
+.wrap {
+	margin: 300px auto;
+	position: relative;	
+	transform-style: preserve-3d;
+	perspective: 800px;
+}
+img {
+	border: none;
+	vertical-align: top;
+	position: absolute;
+	top: 50%;
+	left: 50%;	
+	width: 400px;
+	height: 200px;
+	margin-left: -200px;
+	margin-top: -100px;
+	transition: .7s ease-in-out;
+}
+</style>
+<script>
+window.onload = function () {
+	var wrap = document.querySelector('.wrap');
+	var imgs = wrap.querySelectorAll('img');
+	var target = 0;
+	var now = 3;
+	
+	var onOff = true;
+	for ( var i = 0; i < imgs.length; i++ ) {
+		imgs[i].index = i;
+		imgs[i].onclick = function () {
+			if ( !onOff ) {
+				return;
+			}
+			onOff = false;
+			target = this.index;
+			if ( now < this.index ) {
+				if (this.index - now <= 3) {
+					next();
+				} else {
+					prev();	
+				}
+			} else {
+				if  ( target + 7 - now <= 3) {
+					next();	
+				} else {
+					prev();	
+				}
+			}
+		};	
+	}
+	function next() {
+		now++;
+		if ( now > 6 ) {
+			now = 0;
+		}
+		around(now);
+		if ( now == target ) {
+			onOff = true;
+			return;
+		}
+		setTimeout(function () {
+			next();	
+		},700);
+	};
+	function prev() {
+		now--;
+		if ( now < 0 ) {
+			now = 6;
+		}
+		around(now);
+		if ( now == target ) {
+			onOff = true;
+			return;	
+		}
+		setTimeout(function () {
+			prev();	
+		},700);
+	};
+	
+	around(3);
+	function around(n) {
+		for ( var i = 0; i < 3; i++ ) {
+			var left = n - 1 - i;
+			if ( left < 0 ) {
+				left = left + 7;
+			}
+			var right = n + 1 + i;
+			if ( right > 6 ) {
+				right = right - 7;
+			}
+			imgs[left].style.transform = 'translateX('+ (-150*(i+1)) +'px) translateZ('+( 150- (i*100))+'px) rotateY(30deg)';
+			imgs[right].style.transform = 'translateX('+ (150*(i+1)) +'px) translateZ('+( 150- (i*100))+'px) rotateY(-30deg)'; 
+		}
+		imgs[n].style.transform = 'translateZ(300px)';
+	}
+};
+</script>
+<body>
+<div class="wrap">
+	<img src="img/2016-09-06_21-46-25-000.jpg">
+    <img src="img/QQ图片20160825231319.jpg">
+    <img src="img/2016-09-14_20-54-09-000.jpg">
+    <img src="img/2016-09-16_21-31-11-000.jpg">
+    <img src="img/2016-05-08_21-38-00-000.jpg">
+    <img src="img/2016-09-14_20-37-52-000.jpg">
+    <img src="img/2015-04-24_12-03-51-000.jpg">
+</div>
+</body>
+</html>
